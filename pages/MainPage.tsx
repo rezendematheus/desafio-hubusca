@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components/native";
 import github_instance from "../api/api.github";
 import {
@@ -6,12 +6,12 @@ import {
   TextInputEndEditingEventData,
 } from "react-native";
 import ResultView from "../components/ResultView";
-import type { user } from  "../types"
+import type { user } from "../types";
 
 const fetchUser = async (username: string) => {
   try {
-    const {data}  = await github_instance.get(`/users/${username}`);
-    return data as user
+    const { data } = await github_instance.get(`/users/${username}`);
+    return data as user;
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +25,7 @@ const MainPage = ({ navigation }) => {
     e: NativeSyntheticEvent<TextInputEndEditingEventData>
   ) => {
     e.preventDefault();
-    const newUser = await fetchUser(usernameInput)
+    const newUser = await fetchUser(usernameInput);
     setUser(newUser);
     setUsernameInput("");
   };
@@ -37,7 +37,16 @@ const MainPage = ({ navigation }) => {
         onChangeText={setUsernameInput}
         placeholder="Digite o nome do usuário"
       />
-      {user ? (<ResultView name={user.name} login={user.login} avatar_url={user.avatar_url} locale={user.location}/>): <></>}
+      {user ? (
+        <ResultView
+          name={user.name}
+          login={user.login}
+          avatar_url={user.avatar_url}
+          locale={user.location}
+        />
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };
@@ -47,23 +56,20 @@ const Container = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0D1117;
+  background-color: #0d1117;
 `;
 
-const Title = styled.Text``;
-
 const SearchBar = styled.TextInput.attrs({
-  placeholderTextColor: '#6E7681',
+  placeholderTextColor: "#6E7681",
   textAlign: "center",
 })`
-  color: #FFFFFF;
+  color: #ffffff;
   width: 90%;
   min-width: 200px;
   height: 50px;
   background-color: #010409;
   border-radius: 10px;
-  border: 1px solid #6E7681;
+  border: 1px solid #6e7681;
 `;
-
 
 export default MainPage;
