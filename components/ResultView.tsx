@@ -3,23 +3,24 @@ import styled from "styled-components/native";
 import React from "react";
 
 type Props = {
-  name: string;
-  username: string;
-  locale: string;
+  name?: string;
+  login?: string;
+  avatar_url: string;
+  locale?: string;
 };
 
 const ResultView = (props: Props) => {
-  return (
+    return (
     <StyledResultView>
       <UserImage
         alt=""
         source={1}
-        src="https://avatars.githubusercontent.com/u/86257656?v=4"
+        src={props.avatar_url || "https://avatars.githubusercontent.com/u/86257656?v=4"}
       />
       <NameView>
-        <NameText>{props.name || "Matheus Rezende"} </NameText>
-        <UsernameText>{props.username || "rezendematheus"}</UsernameText>
-        <LocaleText>{props.locale || "São Paulo - SP"}</LocaleText>
+        <NameText>{props.name || "Não informado"} </NameText>
+        <UsernameText>{props.login || "login_usuario"}</UsernameText>
+        <LocaleText>{props.locale || "Não informado"}</LocaleText>
       </NameView>
     </StyledResultView>
   );

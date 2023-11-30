@@ -6,25 +6,27 @@ import {
   TextInputEndEditingEventData,
 } from "react-native";
 import ResultView from "../components/ResultView";
+import type { user } from  "../types"
 
-const fetchUser = async (user: string) => {
+const fetchUser = async (username: string) => {
   try {
-    const test = await github_instance.get(`/users/${user}`);
-    console.log(test.data.login);
-    return test;
+    const {data}  = await github_instance.get(`/users/${username}`);
+    return data as user
   } catch (error) {
     console.log(error);
   }
 };
 
 const MainPage = ({ navigation }) => {
-  const [usernameInput, setUsernameInput] = useState("");
+  const [user, setUser] = useState<user | undefined>();
+  const [usernameInput, setUsernameInput] = useState<string>("");
 
-  const eventHandler = (
+  const eventHandler = async (
     e: NativeSyntheticEvent<TextInputEndEditingEventData>
   ) => {
     e.preventDefault();
-    fetchUser(usernameInput);
+    const newUser = await fetchUser(usernameInput)
+    setUser(newUser);
     setUsernameInput("");
   };
   return (
@@ -35,7 +37,7 @@ const MainPage = ({ navigation }) => {
         onChangeText={setUsernameInput}
         placeholder="Digite o nome do usuário"
       />
-      <ResultView />
+      {user ? (<ResultView name={user.name} login={user.login} avatar_url={user.avatar_url} locale={user.location}/>): <></>}
     </Container>
   );
 };
