@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import styled from 'styled-components/native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <Container>
+      <GreetingBox>Funcionando!</GreetingBox>
       <StatusBar style="auto" />
-    </View>
+    </Container>
   );
 }
 
@@ -18,3 +19,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const Container = styled.View`
+    flex: 1;
+    display: flex;
+    background-color: #0d1117;
+    align-items: center;
+    justify-content: center;
+`
+
+const GreetingBox = styled.Text`
+    color: white;
+`
