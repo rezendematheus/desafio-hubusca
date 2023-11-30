@@ -1,33 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import styled from 'styled-components/native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import MainPage from "./pages/MainPage";
+import ProfilePage from "./pages/ProfilePage";
+import {NativeStackNavigationOptions} from "@react-navigation/native-stack/src/types"
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <Container>
-      <GreetingBox>Funcionando!</GreetingBox>
-      <StatusBar style="auto" />
-    </Container>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen options={ScreenOptions} name="Main" component={MainPage} />
+        <Stack.Screen options={ScreenOptions} name="Profile" component={ProfilePage}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const ScreenOptions: NativeStackNavigationOptions = {
+  title: 'HUBusca',
+  headerTitleAlign: "center",
+  headerStyle: {
+    backgroundColor: '#010409'
   },
-});
-
-const Container = styled.View`
-    flex: 1;
-    display: flex;
-    background-color: #0d1117;
-    align-items: center;
-    justify-content: center;
-`
-
-const GreetingBox = styled.Text`
-    color: white;
-`
+  headerTitleStyle: {
+    fontSize: 40,
+    color: '#FFFFFF',
+  }
+};
