@@ -31,6 +31,12 @@
         "projectId": "31f9cf91-7bb3-4181-a699-400e36919ecf"
       }
     },
-    "owner": "rezende.matheus"
+    "owner": "rezende.matheus",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/31f9cf91-7bb3-4181-a699-400e36919ecf"
+    }
   }
 }
