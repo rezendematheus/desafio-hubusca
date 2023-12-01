@@ -8,11 +8,13 @@ import {
 import ResultView from "../components/ResultView";
 import type { user } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import RecentSearchs from "../components/RecentSearchs";
 
 const MainPage = ({ navigation }) => {
   const [user, setUser] = useState<user | undefined>();
   const [usernameInput, setUsernameInput] = useState<string>("");
   const [recentSearchs, setRecentSearchs] = useState([]);
+  const [recentMenuStage, setRecentMenuStage] = useState("middle");
 
   useEffect(() => {
     const fetchLocalRecentList = async () => {
@@ -20,14 +22,10 @@ const MainPage = ({ navigation }) => {
         const value = await AsyncStorage.getItem("RECENTSEARCHS");
         if (value !== null) {
           const list = JSON.parse(value) as user[];
-          console.log("thats", list);
-
           setRecentSearchs(list);
         }
       } catch (error) {}
     };
-    console.log(recentSearchs);
-
     fetchLocalRecentList();
   }, [user]);
 
@@ -68,6 +66,7 @@ const MainPage = ({ navigation }) => {
       ) : (
         <></>
       )}
+      <RecentSearchs stage={recentMenuStage} setStage={setRecentMenuStage}/>
     </Container>
   );
 };
