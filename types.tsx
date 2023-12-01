@@ -9,3 +9,7 @@ export type user = {
   followers: number;
   following: number;
 };
+
+export interface userMap {
+  [key: number] : user
+}

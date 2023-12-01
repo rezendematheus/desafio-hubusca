@@ -13,7 +13,7 @@ import RecentSearchs from "../components/RecentSearchs";
 const MainPage = ({ navigation }) => {
   const [user, setUser] = useState<user | undefined>();
   const [usernameInput, setUsernameInput] = useState<string>("");
-  const [recentSearchs, setRecentSearchs] = useState([]);
+  const [recentUserList, setRecentUserList] = useState<user[]>([]);
   const [recentMenuStage, setRecentMenuStage] = useState("middle");
 
   useEffect(() => {
@@ -22,9 +22,12 @@ const MainPage = ({ navigation }) => {
         const value = await AsyncStorage.getItem("RECENTSEARCHS");
         if (value !== null) {
           const list = JSON.parse(value) as user[];
-          setRecentSearchs(list);
+
+          setRecentUserList(list);
         }
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchLocalRecentList();
   }, [user]);
@@ -34,19 +37,29 @@ const MainPage = ({ navigation }) => {
   ) => {
     e.preventDefault();
     const newUser = await fetchUser(usernameInput);
-    setUser(newUser);
     setUsernameInput("");
-    const match = recentSearchs.find((user) => {
-            
-      if(user.id === newUser.id)
-        return user
+
+    const user = recentUserList?.find((user) => {
+      return user.id === newUser.id;
     });
-    
-    if (!match) {
-      const newRecentSearchs = [...recentSearchs, newUser];
-      setRecentSearchs(newRecentSearchs);
-      storeLocalRecentList(newRecentSearchs);
+
+    if (user) {
+      const recentCopy = recentUserList.filter((user) => {
+        return user.id !== newUser.id;
+      });
+
+      recentCopy.push(newUser);
+
+      setRecentUserList(recentCopy);
+      storeLocalRecentList(recentCopy);
+    } else {
+      const recentCopy = [...recentUserList, newUser];
+
+      setRecentUserList(recentCopy);
+      storeLocalRecentList(recentCopy);
     }
+
+    setUser(newUser);
   };
   return (
     <Container>
@@ -58,6 +71,7 @@ const MainPage = ({ navigation }) => {
       />
       {user ? (
         <ResultView
+          key={user.id}
           name={user.name}
           login={user.login}
           avatar_url={user.avatar_url}
@@ -66,7 +80,13 @@ const MainPage = ({ navigation }) => {
       ) : (
         <></>
       )}
-      <RecentSearchs stage={recentMenuStage} setStage={setRecentMenuStage}/>
+      <RecentSearchs
+        key="recent"
+        stage={recentMenuStage}
+        setStage={setRecentMenuStage}
+        userList={recentUserList}
+        resultUserId={user?.id || 0}
+      />
     </Container>
   );
 };

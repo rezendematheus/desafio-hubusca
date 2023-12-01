@@ -50,7 +50,7 @@ margin-top: 15px;
   box-sizing: border-box;
   padding: 15px 0px 15px 0px;
   height: 90px;
-  width: 90%;
+  width: 95%;
   min-width: 200px;
   border: 1px solid #6e7681;
   border-radius: 10px;

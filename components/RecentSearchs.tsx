@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import styled from "styled-components/native";
 import Animated, {
   useSharedValue,
@@ -6,16 +6,18 @@ import Animated, {
   useAnimatedStyle,
   Easing,
 } from "react-native-reanimated";
-import { TouchableWithoutFeedback } from "react-native";
 import RecentResultView from "./RecentResultView";
+import type { user } from "../types";
+
 type Props = {
   stage: string;
   setStage: React.Dispatch<React.SetStateAction<string>>;
+  userList?: user[];
+  resultUserId?: number;
 };
 
 const RecentSearchs = (props: Props) => {
   const menuPosition = useSharedValue(-650);
-
   const config = {
     duration: 500,
     easing: Easing.bezier(0.5, 0.01, 0, 1),
@@ -32,7 +34,8 @@ const RecentSearchs = (props: Props) => {
 
   return (
     <AnimatedStyledRecentSearchs style={[style]}>
-      <TouchableWithoutFeedback
+      <TouchSurface
+        activeOpacity={1}
         onPress={() => {
           if (props.stage !== "top") {
             menuPosition.value = -50;
@@ -44,13 +47,33 @@ const RecentSearchs = (props: Props) => {
         }}
       >
         <RecentHeader>
-            <HeaderText>
-                Perfis vistos recentemente
-            </HeaderText>
-            <HeaderIcon title='icon'/>
+          <HeaderText>Perfis vistos recentemente</HeaderText>
+          <HeaderIcon title="icon" />
         </RecentHeader>
-      </TouchableWithoutFeedback>
-      <RecentResultView />
+      </TouchSurface>
+      <ReverseView>
+        {props.userList ? (
+          <>
+            {props.userList.map((user) =>
+              user.id !== props?.resultUserId ? (
+                <RecentResultView
+                  key={user.login}
+                  name={user.name}
+                  login={user.login}
+                  avatar_url={user.avatar_url}
+                  locale={user.location}
+                />
+              ) : (
+                <Fragment key={user.id}>
+
+                </Fragment>
+              )
+            )}
+          </>
+        ) : (
+          <>Não há buscas recentes</>
+        )}
+      </ReverseView>
     </AnimatedStyledRecentSearchs>
   );
 };
@@ -71,17 +94,28 @@ const RecentHeader = styled.View`
 `;
 
 const HeaderText = styled.Text`
-    color: white;
-    font-size: 16px;
-`
+  color: white;
+  font-size: 16px;
+`;
 
-const HeaderIcon = styled.Button`
-    
-`
+const HeaderIcon = styled.Button``;
+
+const ReverseView = styled.View`
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+`;
 
 const StyledRecentSearchs = styled.View<{ $stage?: string }>`
   position: absolute;
   height: 100%;
   width: 90%;
-  background-color: rgba(13,17,23,0.9);
+  background-color: rgba(13, 17, 23, 0.9);
+`;
+
+const TouchSurface = styled.TouchableOpacity`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `;
