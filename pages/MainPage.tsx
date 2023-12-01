@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import github_instance from "../api/api.github";
 import {
@@ -7,19 +7,29 @@ import {
 } from "react-native";
 import ResultView from "../components/ResultView";
 import type { user } from "../types";
-
-const fetchUser = async (username: string) => {
-  try {
-    const { data } = await github_instance.get(`/users/${username}`);
-    return data as user;
-  } catch (error) {
-    console.log(error);
-  }
-};
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MainPage = ({ navigation }) => {
   const [user, setUser] = useState<user | undefined>();
   const [usernameInput, setUsernameInput] = useState<string>("");
+  const [recentSearchs, setRecentSearchs] = useState([]);
+
+  useEffect(() => {
+    const fetchLocalRecentList = async () => {
+      try {
+        const value = await AsyncStorage.getItem("RECENTSEARCHS");
+        if (value !== null) {
+          const list = JSON.parse(value) as user[];
+          console.log("thats", list);
+
+          setRecentSearchs(list);
+        }
+      } catch (error) {}
+    };
+    console.log(recentSearchs);
+
+    fetchLocalRecentList();
+  }, [user]);
 
   const eventHandler = async (
     e: NativeSyntheticEvent<TextInputEndEditingEventData>
@@ -28,6 +38,17 @@ const MainPage = ({ navigation }) => {
     const newUser = await fetchUser(usernameInput);
     setUser(newUser);
     setUsernameInput("");
+    const match = recentSearchs.find((user) => {
+            
+      if(user.id === newUser.id)
+        return user
+    });
+    
+    if (!match) {
+      const newRecentSearchs = [...recentSearchs, newUser];
+      setRecentSearchs(newRecentSearchs);
+      storeLocalRecentList(newRecentSearchs);
+    }
   };
   return (
     <Container>
@@ -49,6 +70,45 @@ const MainPage = ({ navigation }) => {
       )}
     </Container>
   );
+};
+
+const fetchUser = async (username: string) => {
+  try {
+    const {
+      data: {
+        login,
+        name,
+        id,
+        avatar_url,
+        url,
+        repos_url,
+        location,
+        followers,
+        following,
+      },
+    } = await github_instance.get(`/users/${username}`);
+    return {
+      login,
+      name,
+      id,
+      avatar_url,
+      url,
+      repos_url,
+      location,
+      followers,
+      following,
+    } as user;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const storeLocalRecentList = async (userArr: user[]) => {
+  try {
+    await AsyncStorage.setItem("RECENTSEARCHS", JSON.stringify(userArr));
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const Container = styled.View`
