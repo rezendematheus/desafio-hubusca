@@ -107,7 +107,7 @@ const ReverseView = styled.View`
   align-items: center;
 `;
 
-const StyledRecentSearchs = styled.View<{ $stage?: string }>`
+const StyledRecentSearchs = styled.View`
   position: absolute;
   height: 100%;
   width: 90%;

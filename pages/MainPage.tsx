@@ -7,36 +7,38 @@ import {
 } from "react-native";
 import ResultView from "../components/ResultView";
 import type { user } from "../types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import RecentSearchs from "../components/RecentSearchs";
+import SearchBar from "../components/SearchBar";
+import {
+  fetchLocalRecentList,
+  storeLocalRecentList,
+} from "../asyncStorage/RecentUserList";
 
 const MainPage = ({ navigation }) => {
   const [user, setUser] = useState<user | undefined>();
   const [usernameInput, setUsernameInput] = useState<string>("");
   const [recentUserList, setRecentUserList] = useState<user[]>([]);
   const [recentMenuStage, setRecentMenuStage] = useState("middle");
+  const [searchError, setSearchError] = useState<number>(0);
 
   useEffect(() => {
-    const fetchLocalRecentList = async () => {
-      try {
-        const value = await AsyncStorage.getItem("RECENTSEARCHS");
-        if (value !== null) {
-          const list = JSON.parse(value) as user[];
-
-          setRecentUserList(list);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchLocalRecentList();
-  }, [user]);
+    fetchLocalRecentList(setRecentUserList);
+  }, []);
 
   const eventHandler = async (
     e: NativeSyntheticEvent<TextInputEndEditingEventData>
   ) => {
     e.preventDefault();
-    const newUser = await fetchUser(usernameInput);
+    let newUser: user;
+    try {
+      newUser = await fetchUser(usernameInput);
+    } catch (error) {
+      if (error.response.status === 404) setSearchError(404);
+      else {
+        setSearchError(400);
+      }
+      return;
+    }
     setUsernameInput("");
 
     const user = recentUserList?.find((user) => {
@@ -58,17 +60,26 @@ const MainPage = ({ navigation }) => {
       setRecentUserList(recentCopy);
       storeLocalRecentList(recentCopy);
     }
-
+    setSearchError(0);
     setUser(newUser);
   };
   return (
     <Container>
       <SearchBar
-        value={usernameInput}
-        onEndEditing={eventHandler}
-        onChangeText={setUsernameInput}
-        placeholder="Digite o nome do usuário"
+        usernameInput={usernameInput}
+        setUsernameInput={setUsernameInput}
+        eventHandler={eventHandler}
+        searchError={searchError}
       />
+      {searchError ? (
+        searchError === 404 ? (
+          <ErrorText>Usuário não existe</ErrorText>
+        ) : (
+          <ErrorText>Algo deu errado</ErrorText>
+        )
+      ) : (
+        <></>
+      )}
       {user ? (
         <ResultView
           key={user.id}
@@ -118,15 +129,7 @@ const fetchUser = async (username: string) => {
       following,
     } as user;
   } catch (error) {
-    console.log(error);
-  }
-};
-
-const storeLocalRecentList = async (userArr: user[]) => {
-  try {
-    await AsyncStorage.setItem("RECENTSEARCHS", JSON.stringify(userArr));
-  } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
@@ -138,17 +141,9 @@ const Container = styled.View`
   background-color: #0d1117;
 `;
 
-const SearchBar = styled.TextInput.attrs({
-  placeholderTextColor: "#6E7681",
-  textAlign: "center",
-})`
-  color: #ffffff;
-  width: 90%;
-  min-width: 200px;
-  height: 50px;
-  background-color: #010409;
-  border-radius: 10px;
-  border: 1px solid #6e7681;
+const ErrorText = styled.Text`
+  margin-top: 15px;
+  color: #f85149;
 `;
 
 export default MainPage;
