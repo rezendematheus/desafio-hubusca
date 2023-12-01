@@ -9,9 +9,9 @@ type Props = {
   locale?: string;
 };
 
-const ResultView = (props: Props) => {
+const RecentResultView = (props: Props) => {
     return (
-    <StyledResultView>
+    <StyledRecentResultView>
       <UserImage
         alt=""
         source={1}
@@ -22,11 +22,11 @@ const ResultView = (props: Props) => {
         <UsernameText>{props.login || "login_usuario"}</UsernameText>
         <LocaleText>{props.locale || "Não informado"}</LocaleText>
       </NameView>
-    </StyledResultView>
+    </StyledRecentResultView>
   );
 };
 
-export default ResultView;
+export default RecentResultView;
 
 const box = styled.View``;
 
@@ -43,8 +43,8 @@ const UsernameText = styled.Text`
   color: #7d8590;
 `;
 
-const StyledResultView = styled.View`
-  margin-top: 60px;
+const StyledRecentResultView = styled.View`
+margin-top: 15px;
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
