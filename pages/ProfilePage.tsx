@@ -4,6 +4,7 @@ import type { ProfileProps, repo } from "../types";
 
 import github_instance from "../api/api.github";
 import UserInfoView from "../components/UserInfoView";
+import RepositoryView from "../components/RepositoryView";
 
 const ProfilePage = ({ route, navigation }: ProfileProps) => {
   const { user } = route.params;
@@ -17,7 +18,10 @@ const ProfilePage = ({ route, navigation }: ProfileProps) => {
   return (
     <Container>
       <ScrollableContainer>
-       <UserInfoView userState={userState}/>
+        <UserInfoView userState={userState} />
+
+        <RepositoryTitle>Repositórios de {userState.name}</RepositoryTitle>
+        {repos[0] ? repos.map((repo: repo) => <RepositoryView key={repo.name} repo={repo} />) : <></>}
       </ScrollableContainer>
     </Container>
   );
@@ -59,6 +63,10 @@ const Container = styled.View`
   padding-top: 50px;
 `;
 
-
+const RepositoryTitle = styled.Text`
+  margin-top: 12px;
+  margin-bottom: 9px;
+  color: white;
+`;
 
 export default ProfilePage;
