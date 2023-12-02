@@ -4,6 +4,7 @@ import React from "react";
 import { user } from "../types";
 import { Pressable } from "react-native";
 
+
 type Props = {
   user: user;
   navigation;

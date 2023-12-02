@@ -10,7 +10,17 @@ export type user = {
   location: string;
   followers: number;
   following: number;
+  public_repos: number;
 };
+
+export type repo = {
+  created_at: string;
+  name: string;
+  pushed_at: string;
+  html_url: string;
+  description: string;
+  language: string;
+}
 
 type StackParamList = {
   Main: undefined;

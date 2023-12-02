@@ -20,6 +20,7 @@ const MainPage = ({ navigation }: MainProps) => {
   const [recentUserList, setRecentUserList] = useState<user[]>([]);
   const [recentMenuStage, setRecentMenuStage] = useState("middle");
   const [searchError, setSearchError] = useState<number>(0);
+  const [searchErrorMessage, setSearchErrorMessage] = useState("")
 
   useEffect(() => {
     fetchLocalRecentList(setRecentUserList);
@@ -31,11 +32,17 @@ const MainPage = ({ navigation }: MainProps) => {
     e.preventDefault();
     let newUser: user;
     try {
+      if(usernameInput === "" ) throw Error;
       newUser = await fetchUser(usernameInput);
     } catch (error) {
-      if (error.response.status === 404) setSearchError(404);
+      if (error?.response?.status === 404) setSearchError(404);
+      else if (usernameInput === "" ){
+        setSearchError(400);
+        setSearchErrorMessage("Campo de busca vazio");
+      }
       else {
         setSearchError(400);
+        setSearchErrorMessage("Algo deu errado");
       }
       console.log(error);
       return;
@@ -77,7 +84,7 @@ const MainPage = ({ navigation }: MainProps) => {
         searchError === 404 ? (
           <ErrorText>Usuário não existe</ErrorText>
         ) : (
-          <ErrorText>Algo deu errado</ErrorText>
+          <ErrorText>{searchErrorMessage}</ErrorText>
         )
       ) : (
         <></>
@@ -118,6 +125,7 @@ const fetchUser = async (username: string) => {
         location,
         followers,
         following,
+        public_repos
       },
     } = await github_instance.get(`/users/${username}`);
     return {
@@ -130,6 +138,7 @@ const fetchUser = async (username: string) => {
       location,
       followers,
       following,
+      public_repos
     } as user;
   } catch (error) {
     throw error;

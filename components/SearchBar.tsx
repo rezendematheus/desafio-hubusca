@@ -22,6 +22,7 @@ const SearchBar = (props: Props) => {
       onEndEditing={props.eventHandler}
       onChangeText={props.setUsernameInput}
       placeholder="Digite o nome do usuário"
+      inputMode="search"
     />
   );
 };

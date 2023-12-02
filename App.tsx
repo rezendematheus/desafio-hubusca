@@ -16,7 +16,7 @@ export default function App() {
           component={MainPage}
         />
         <Stack.Screen
-          options={ScreenOptions}
+          options={ProfileScreenOptions}
           name="Profile"
           component={ProfilePage}
         />
@@ -36,3 +36,5 @@ const ScreenOptions: NativeStackNavigationOptions = {
     color: "#FFFFFF",
   },
 };
+
+const ProfileScreenOptions = {...ScreenOptions, headerShown: false};

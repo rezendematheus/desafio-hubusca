@@ -60,19 +60,6 @@ const UsernameText = styled.Text`
   color: #7d8590;
 `;
 
-const StyledResultView = styled.View`
-  margin-top: 60px;
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-  padding: 15px 0px 15px 0px;
-  height: 90px;
-  width: 90%;
-  min-width: 200px;
-  border: 1px solid #6e7681;
-  border-radius: 10px;
-`;
-
 const UserImage = styled.Image`
   background-color: white;
   height: 60px;
@@ -86,3 +73,18 @@ const LocaleText = styled.Text`
   font-size: 10px;
   color: #7d8590;
 `;
+
+const StyledResultView = styled.View`
+  margin-top: 60px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 15px 0px 15px 0px;
+  height: 90px;
+  width: 90%;
+  min-width: 200px;
+  border: 1px solid #6e7681;
+  border-radius: 10px;
+`;
+
+
