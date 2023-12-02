@@ -47,7 +47,7 @@ const RecentSearchs = (props: Props) => {
               menuPosition.value = -(screenHeight*0.05);
               props.setStage("top");
             } else {
-              menuPosition.value = -(screenHeight*0.89);
+              menuPosition.value = -(screenHeight*0.70);
               props.setStage("bottom");
             }
           }
