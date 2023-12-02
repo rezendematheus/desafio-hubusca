@@ -6,7 +6,7 @@ import {
   TextInputEndEditingEventData,
 } from "react-native";
 import ResultView from "../components/ResultView";
-import type { user } from "../types";
+import type { MainProps, user } from "../types";
 import RecentSearchs from "../components/RecentSearchs";
 import SearchBar from "../components/SearchBar";
 import {
@@ -14,7 +14,7 @@ import {
   storeLocalRecentList,
 } from "../asyncStorage/RecentUserList";
 
-const MainPage = ({ navigation }) => {
+const MainPage = ({ navigation }: MainProps) => {
   const [user, setUser] = useState<user | undefined>();
   const [usernameInput, setUsernameInput] = useState<string>("");
   const [recentUserList, setRecentUserList] = useState<user[]>([]);
@@ -37,6 +37,7 @@ const MainPage = ({ navigation }) => {
       else {
         setSearchError(400);
       }
+      console.log(error);
       return;
     }
     setUsernameInput("");
@@ -63,6 +64,7 @@ const MainPage = ({ navigation }) => {
     setSearchError(0);
     setUser(newUser);
   };
+
   return (
     <Container>
       <SearchBar
@@ -83,10 +85,8 @@ const MainPage = ({ navigation }) => {
       {user ? (
         <ResultView
           key={user.id}
-          name={user.name}
-          login={user.login}
-          avatar_url={user.avatar_url}
-          locale={user.location}
+          navigation={navigation}
+          user={user}
         />
       ) : (
         <></>
@@ -97,10 +97,13 @@ const MainPage = ({ navigation }) => {
         setStage={setRecentMenuStage}
         userList={recentUserList}
         resultUserId={user?.id || 0}
+        navigation={navigation}
       />
     </Container>
   );
 };
+
+
 
 const fetchUser = async (username: string) => {
   try {

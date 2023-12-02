@@ -1,34 +1,51 @@
 import styled from "styled-components/native";
-
+import type { user } from "../types";
 import React from "react";
+import { Pressable } from "react-native";
 
 type Props = {
-  name?: string;
-  login?: string;
-  avatar_url?: string;
-  locale?: string;
+  user?: user;
+  navigation;
+};
+
+const navigateToProfile = ({ navigation }, user: user) => {
+  navigation.navigate("Profile", { user });
 };
 
 const ResultView = (props: Props) => {
-    return (
+  return (
     <StyledResultView>
-      <UserImage
-        alt=""
-        source={1}
-        src={props.avatar_url || "https://avatars.githubusercontent.com/u/86257656?v=4"}
-      />
+      <Pressable
+        onPress={() => {
+          navigateToProfile({ navigation: props.navigation }, props.user);
+        }}
+      >
+        <UserImage
+          alt=""
+          source={1}
+          src={
+            props.user.avatar_url ||
+            "https://avatars.githubusercontent.com/u/86257656?v=4"
+          }
+        />
+      </Pressable>
       <NameView>
-        <NameText>{props.name || "Não informado"} </NameText>
-        <UsernameText>{props.login || "login_usuario"}</UsernameText>
-        <LocaleText>{props.locale || "Não informado"}</LocaleText>
+        <Pressable
+          onPress={() => {
+            navigateToProfile({ navigation: props.navigation }, props.user);
+          }}
+        >
+          <NameText>{props.user.name || "Não informado"} </NameText>
+        </Pressable>
+
+        <UsernameText>{props.user.login || "login_usuario"}</UsernameText>
+        <LocaleText>{props.user.location || "Não informado"}</LocaleText>
       </NameView>
     </StyledResultView>
   );
 };
 
 export default ResultView;
-
-const box = styled.View``;
 
 const NameView = styled.View`
   display: flex;

@@ -15,6 +15,7 @@ type Props = {
   setStage: React.Dispatch<React.SetStateAction<string>>;
   userList?: user[];
   resultUserId?: number;
+  navigation;
 };
 
 const screenHeight = Dimensions.get("window").height;
@@ -62,10 +63,8 @@ const RecentSearchs = (props: Props) => {
                 user.id !== props?.resultUserId ? (
                   <RecentResultView
                     key={user.login}
-                    name={user.name}
-                    login={user.login}
-                    avatar_url={user.avatar_url}
-                    locale={user.location}
+                    user={user}
+                    navigation={props.navigation}
                   />
                 ) : (
                   <Fragment key={user.id}></Fragment>
@@ -103,7 +102,9 @@ const ScrollView = styled.ScrollView`
 
 const ReverseView = styled.View`
   display: flex;
+  flex: 60px;
   flex-direction: column-reverse;
+  align-items: center;
 `;
 
 const StyledRecentSearchs = styled.View`

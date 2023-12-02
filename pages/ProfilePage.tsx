@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components/native";
+import type { ProfileProps } from "../types";
 
-type Props = {
-  navigation;
-};
+const ProfilePage = ({ route, navigation}: ProfileProps) => {
 
-const ProfilePage = (props: Props) => {
+  const { user } = route.params;
+  console.log(user);
+  
+
   return <Container></Container>;
 };
 
