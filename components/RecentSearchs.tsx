@@ -8,6 +8,7 @@ import Animated, {
 } from "react-native-reanimated";
 import RecentResultView from "./RecentResultView";
 import type { user } from "../types";
+import { Dimensions, Touchable, TouchableOpacity } from "react-native";
 
 type Props = {
   stage: string;
@@ -15,6 +16,8 @@ type Props = {
   userList?: user[];
   resultUserId?: number;
 };
+
+const screenHeight = Dimensions.get("window").height;
 
 const RecentSearchs = (props: Props) => {
   const menuPosition = useSharedValue(-650);
@@ -51,40 +54,34 @@ const RecentSearchs = (props: Props) => {
           <HeaderIcon title="icon" />
         </RecentHeader>
       </TouchSurface>
-      <ReverseView>
-        {props.userList ? (
-          <>
-            {props.userList.map((user) =>
-              user.id !== props?.resultUserId ? (
-                <RecentResultView
-                  key={user.login}
-                  name={user.name}
-                  login={user.login}
-                  avatar_url={user.avatar_url}
-                  locale={user.location}
-                />
-              ) : (
-                <Fragment key={user.id}>
-
-                </Fragment>
-              )
-            )}
-          </>
-        ) : (
-          <>Não há buscas recentes</>
-        )}
-      </ReverseView>
+      <ScrollView nestedScrollEnabled={true} scrollEnabled={true}>
+        <ReverseView>
+          {props.userList ? (
+            <>
+              {props.userList.map((user) =>
+                user.id !== props?.resultUserId ? (
+                  <RecentResultView
+                    key={user.login}
+                    name={user.name}
+                    login={user.login}
+                    avatar_url={user.avatar_url}
+                    locale={user.location}
+                  />
+                ) : (
+                  <Fragment key={user.id}></Fragment>
+                )
+              )}
+            </>
+          ) : (
+            <>Não há buscas recentes</>
+          )}
+        </ReverseView>
+      </ScrollView>
     </AnimatedStyledRecentSearchs>
   );
 };
 
 export default RecentSearchs;
-
-const NiceButton = styled.Button`
-  width: 50px;
-  height: 50px;
-  background-color: white;
-`;
 
 const RecentHeader = styled.View`
   display: flex;
@@ -100,16 +97,18 @@ const HeaderText = styled.Text`
 
 const HeaderIcon = styled.Button``;
 
+const ScrollView = styled.ScrollView`
+  height: max;
+`;
+
 const ReverseView = styled.View`
-  width: 100%;
   display: flex;
   flex-direction: column-reverse;
-  align-items: center;
 `;
 
 const StyledRecentSearchs = styled.View`
-  position: absolute;
   height: 100%;
+  position: absolute;
   width: 90%;
   background-color: rgba(13, 17, 23, 0.9);
 `;
