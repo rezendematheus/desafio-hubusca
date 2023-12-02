@@ -9,6 +9,7 @@ import Animated, {
 import RecentResultView from "./RecentResultView";
 import type { user } from "../types";
 import { Dimensions, Touchable, TouchableOpacity } from "react-native";
+import { EvilIcons } from '@expo/vector-icons'; 
 
 type Props = {
   stage: string;
@@ -18,10 +19,10 @@ type Props = {
   navigation;
 };
 
-const screenHeight = Dimensions.get("window").height;
 
 const RecentSearchs = (props: Props) => {
-  const menuPosition = useSharedValue(-650);
+  const screenHeight = Dimensions.get("window").height;
+  const menuPosition = useSharedValue(-(screenHeight*0.70));
   const config = {
     duration: 500,
     easing: Easing.bezier(0.5, 0.01, 0, 1),
@@ -41,18 +42,20 @@ const RecentSearchs = (props: Props) => {
       <TouchSurface
         activeOpacity={1}
         onPress={() => {
-          if (props.stage !== "top") {
-            menuPosition.value = -50;
-            props.setStage("top");
-          } else {
-            menuPosition.value = -800;
-            props.setStage("bottom");
+          if(props.userList) {
+            if (props.stage !== "top") {
+              menuPosition.value = -(screenHeight*0.05);
+              props.setStage("top");
+            } else {
+              menuPosition.value = -(screenHeight*0.89);
+              props.setStage("bottom");
+            }
           }
         }}
       >
         <RecentHeader>
           <HeaderText>Perfis vistos recentemente</HeaderText>
-          <HeaderIcon title="icon" />
+          <EvilIcons name="chevron-up" size={30} color="white" />
         </RecentHeader>
       </TouchSurface>
       <ScrollView nestedScrollEnabled={true} scrollEnabled={true}>
