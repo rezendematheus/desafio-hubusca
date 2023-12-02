@@ -23,7 +23,7 @@ npm install
 ```
 https://docs.expo.dev/get-started/expo-go/
 ```
-4. Inicie a o servidor expo
+4. Inicie o servidor expo
 ```
 npx expo start
 ```
