@@ -1,7 +1,11 @@
 # desafio-hubusca
 
-Para que conseguíssemos buscar com mais facilidade e rapidez os repositórios dos devs, percebemos a necessidade de criar um web-app.
+Para que conseguíssemos buscar com mais facilidade e rapidez os repositórios dos devs, percebemos a necessidade de criar um web-aplicativo Android.
+O aplicativo é capaz fazer a busca e visualização de contas do Github. Assim como seus repositórios.
 
+## Design do aplicativo
+
+![Texto Alternativo]((https://ibb.co/rkgwmst))
 
 ## Pré-requisitos
 
@@ -30,7 +34,7 @@ npx expo start
 
 #Ou
 
-1. Baixe o aplicativo
+1. Baixe o aplicativo android
 ```
 https://drive.google.com/file/d/1AAVR6qa79W9GTMp2UebVxgjTYESTUY4C/view?usp=drive_link
 ```
