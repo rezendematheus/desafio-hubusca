@@ -5,7 +5,6 @@ const baseUrl: string = "https://api.github.com" //process.env.EXPO_PUBLIC_GITHU
 const github_instance = axios.create({
   baseURL: baseUrl,
   headers: {
-    Authorization: "Bearer " + TOKEN,
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
   },
