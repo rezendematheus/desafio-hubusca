@@ -5,7 +5,7 @@ O aplicativo é capaz fazer a busca e visualização de contas do Github. Assim 
 
 ## Design do aplicativo
 
-![Texto Alternativo]((https://ibb.co/rkgwmst))
+![app design](https://github.com/rezendematheus/desafio-hubusca/assets/86257656/7139fe8a-0596-486c-9eb7-3d2ea3ca20ec)
 
 ## Pré-requisitos
 
